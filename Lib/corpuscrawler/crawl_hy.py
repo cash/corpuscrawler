@@ -28,15 +28,15 @@ def crawl_azg_am(crawler, out):
     urls = set()
     for d in daterange(date(2001, 1, 9), date.today()):
         datestr = '%04d%02d%02d00' % (d.year, d.month, d.day)
-        url = 'http://www.azg.am/AM/%s' % datestr
+        url = 'https://www.azg.am/AM/%s' % datestr
         doc = crawler.fetch(url)
         assert doc.status == 200, (doc.status, url)
         content = doc.content.decode('utf-8')
         articles = [a for a in re.findall(r'20\d{8}', content)
                     if not a.endswith('00')]
         for a in articles:
-            urls.add('http://www.azg.am/wap/?nl=AM&id=%s&Base_PUB=0' % a)
-        print(len(urls))
+            urls.add('https://www.azg.am/index_wap.php?nl=AM&id=%s&Base_PUB=0' % a)
+
     for url in sorted(urls):
         pubdate = re.search(r'id=(20\d{6})', url).group(1)
         doc = crawler.fetch(url)
